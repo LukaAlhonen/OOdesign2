@@ -1,0 +1,26 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root{
+	-fx-font-family: "Copperplate Gothic Light";
+}
+
+.list-cell:hover{
+	-fx-background-color: rgb(189, 189, 189);
+	-fx-text-fill: -fx-background; 
+}
+
+.list-cell:selected{
+	-fx-background-color: rgb(189, 189, 189);
+	-fx-text-fill: rgb(0,0,0); 
+}
+
+.tree-cell:selected{
+	-fx-background-color: rgb(189, 189, 189);
+	-fx-text-fill: rgb(0,0,0); 
+}
+
+.tree-cell:hover{
+	-fx-background-color: rgb(189, 189, 189);
+	-fx-text-fill: -fx-background; 
+}
+
