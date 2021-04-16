@@ -1,8 +1,12 @@
 package controller;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import model.Album;
 
 
@@ -17,6 +21,8 @@ public class MusicOrganizerController {
 	private MusicOrganizerWindow view;
 	private SoundClipBlockingQueue queue;
 	private Album root;
+	private String name;
+	private Album newTreeNode;
 	
 	public MusicOrganizerController() {
 
@@ -38,6 +44,13 @@ public class MusicOrganizerController {
 	public Set<SoundClip> loadSoundClips(String path) {
 		Set<SoundClip> clips = SoundClipLoader.loadSoundClips(path);
 		// TODO: Add the loaded sound clips to the root album
+		Iterator<SoundClip> it = clips.iterator();
+		while (it.hasNext()) {
+			root.addSoundClip(it.next());
+
+		}
+
+
 
 		return clips;
 	}
@@ -56,25 +69,45 @@ public class MusicOrganizerController {
 	/**
 	 * Adds an album to the Music Organizer
 	 */
-	public void addNewAlbum(){ //TODO Update parameters if needed - e.g. you might want to give the currently selected album as parameter
+	public void addNewAlbum(Album album){ //TODO Update parameters if needed - e.g. you might want to give the currently selected album as parameter
 		// TODO: Add your code here
+		Album x = new Album(view.promptForAlbumName());
+		if (album == null) {
+			getRootAlbum().addSubAlbum(x);
+		} else {
+			album.addSubAlbum(x);
+			view.onAlbumAdded(x);
+		}
+
+
+
 		
 	}
 	
 	/**
 	 * Removes an album from the Music Organizer
 	 */
-	public void deleteAlbum(){ //TODO Update parameters if needed
+	public void deleteAlbum(Album album){ //TODO Update parameters if needed
 		// TODO: Add your code here
+
 		
 	}
 	
 	/**
 	 * Adds sound clips to an album
 	 */
-	public void addSoundClips(){ //TODO Update parameters if needed
-		// TODO: Add your code here
-		
+	public void addSoundClips(Album album, List<SoundClip> clep){ //TODO Update parameters if needed
+		for (SoundClip clip: clep) {
+			byte check = 0;
+			for (int i = 0; i < album.getNumSoundClips(); i++) {
+				if (clip.equals(album.getSoundClip(i))) {
+					check = 1;
+				}
+			}
+			if (check == 0) {
+				album.addSoundClip(clip);
+			}
+		}
 	}
 	
 	/**

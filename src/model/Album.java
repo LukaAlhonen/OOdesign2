@@ -54,6 +54,9 @@ public class Album {
         return LjudFiler.get(LjudFiler.size() - 1);
     }
 
+    public int getNumSoundClips() {
+        return LjudFiler.size();
+    }
     // Returnerar subalbumet vid indexet
     public Album getSubAlbum(int index){
         if(SubAlbum.size() == 0){

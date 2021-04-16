@@ -1,27 +1,21 @@
 package view;
-	
-import java.util.List;
-import java.util.Optional;
 
 import controller.MusicOrganizerController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.Album;
 import model.SoundClip;
-import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 
+import java.util.List;
+import java.util.Optional;
 
 
 public class MusicOrganizerWindow extends Application {
@@ -100,7 +94,7 @@ public class MusicOrganizerWindow extends Application {
 	private TreeView<Album> createTreeView(){
 		rootNode = new TreeItem<>(controller.getRootAlbum());
 		TreeView<Album> v = new TreeView<>(rootNode);
-		
+		//Fråga kristian om hur man sätter en ny nod/album till treeview
 		v.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -108,6 +102,7 @@ public class MusicOrganizerWindow extends Application {
 				if(e.getClickCount()==2) {
 					// This code gets invoked whenever the user double clicks in the TreeView
 					// TODO: ADD YOUR CODE HERE
+					soundClipTable.display(getSelectedAlbum());
 					
 				}
 				

@@ -30,7 +30,10 @@ public class SoundClipListView extends ListView<SoundClip> {
 	public void display(Album album){
 		this.getItems().clear();
 		
-		// TODO: 
+		// TODO:
+		for (int i = 0; i < album.getNumSoundClips(); i++) {
+			clips.add(album.getSoundClip(i));
+		}
 		// Add all SoundClips contained in the parameter album to 
 		// the list of SoundClips 'clips' (the instance variable)
 		

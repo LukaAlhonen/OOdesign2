@@ -5,22 +5,22 @@
 }
 
 .list-cell:hover{
-	-fx-background-color: rgb(189, 189, 189);
+	-fx-background-color: #00f0a8;
 	-fx-text-fill: -fx-background; 
 }
 
 .list-cell:selected{
-	-fx-background-color: rgb(189, 189, 189);
+	-fx-background-color: #464180;
 	-fx-text-fill: rgb(0,0,0); 
 }
 
 .tree-cell:selected{
-	-fx-background-color: rgb(189, 189, 189);
+	-fx-background-color: #ff0883;
 	-fx-text-fill: rgb(0,0,0); 
 }
 
 .tree-cell:hover{
-	-fx-background-color: rgb(189, 189, 189);
+	-fx-background-color: #ff0000;
 	-fx-text-fill: -fx-background; 
 }
 

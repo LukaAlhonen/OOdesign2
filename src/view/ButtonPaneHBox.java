@@ -60,7 +60,7 @@ public class ButtonPaneHBox extends HBox {
 			@Override
 			public void handle(ActionEvent arg0) {
 			
-				controller.addNewAlbum();
+				controller.addNewAlbum(view.getSelectedAlbum());
 			}
 			
 		});
@@ -92,7 +92,7 @@ public class ButtonPaneHBox extends HBox {
 			@Override
 			public void handle(ActionEvent arg0) {
 				
-				controller.addSoundClips();
+				controller.addSoundClips(view.getSelectedAlbum(),view.getSelectedSoundClips());
 			}
 			
 		});
