@@ -14,7 +14,7 @@ public class Album {
     private String name;
     private Set<Album> SubAlbum = new HashSet<>(); // Arraylist för att representera SubAlbum
     private Set<SoundClip> LjudFiler = new HashSet<>(); // Arraylist för att representera LjudFiler
-    private Album parent;
+    private Album parent; // För att skapa en länk till albumets parent
 
     // Simpel construktor, om namnet är tomt får albumet ett default namn
     public Album(String name, Album parent) {
@@ -42,10 +42,12 @@ public class Album {
     // Getters
 
     public Set getSubAlbums() {
+        assert invariant();
         return SubAlbum;
     }
 
     public Set getSoundClips() {
+        assert invariant();
         return LjudFiler;
     }
 
@@ -85,7 +87,7 @@ public class Album {
     }
 
 
-    // Tar bort det sista subalbumet och returnerar det
+    // Tar bort det givna subalbumet
     public boolean removeSubAlbum(Album album){
 
         assert invariant();
@@ -93,7 +95,7 @@ public class Album {
 
     }
 
-    // Tar bort ljudfilen vid indexet och returnerar den
+    // Tar bort den givna ljudfilen
     public boolean removeSoundClip(SoundClip song){
 
         assert invariant();
@@ -106,7 +108,10 @@ public class Album {
         return name != "" && SubAlbum.size() >= 0 && LjudFiler.size() >= 0 && SubAlbum.size() <= 500;
     }
 
+    // Returnerar albumets parent
     public Album getParent() {
+
+        assert invariant();
         return parent;
     }
 
