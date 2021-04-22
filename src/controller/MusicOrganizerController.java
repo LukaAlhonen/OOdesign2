@@ -68,18 +68,13 @@ public class MusicOrganizerController {
 	 */
 	public void addNewAlbum(Album album){ //TODO Update parameters if needed - e.g. you might want to give the currently selected album as parameter
 		// TODO: Add your code here
-		Album x = new Album(view.promptForAlbumName(), album);
-		if (album == null) {
-			getRootAlbum().addSubAlbum(x);
-			view.onAlbumAdded(x);
-		} else {
-			album.addSubAlbum(x);
-			view.onAlbumAdded(x);
+		if(album == null){
+			return;
 		}
 
-
-
-		
+		Album x = new Album(view.promptForAlbumName(), album);
+		album.addSubAlbum(x);
+		view.onAlbumAdded(x);
 	}
 	
 	/**
@@ -109,10 +104,13 @@ public class MusicOrganizerController {
 	/**
 	 * Removes sound clips from an album
 	 */
-	public void removeSoundClips(Album album, SoundClip clip){ //TODO Update parameters if needed
+	public void removeSoundClips(Album album, List<SoundClip> clips){ //TODO Update parameters if needed
 
 		// TODO: Add your code here
-		
+		for(SoundClip clip : clips){
+			album.removeSoundClip(clip);
+		}
+		view.onClipsUpdated();
 	}
 	
 	/**

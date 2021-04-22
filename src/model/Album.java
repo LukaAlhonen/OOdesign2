@@ -12,8 +12,8 @@ public class Album {
     private final int MAX_SUBALBUMS = 500; // Max antal subalbum
     private int numSubAlbums; // Håller reda på mängden subalbum
     private String name;
-    private TreeSet<Album> SubAlbum = new TreeSet<Album>(); // Arraylist för att representera SubAlbum
-    private TreeSet<SoundClip> LjudFiler = new TreeSet<SoundClip>(); // Arraylist för att representera LjudFiler
+    private Set<Album> SubAlbum = new HashSet<>(); // Arraylist för att representera SubAlbum
+    private Set<SoundClip> LjudFiler = new HashSet<>(); // Arraylist för att representera LjudFiler
     private Album parent;
 
     // Simpel construktor, om namnet är tomt får albumet ett default namn
@@ -23,6 +23,7 @@ public class Album {
         } else{
             this.name = "New Album";
         }
+        this.parent = parent;
     }
     public Album(String name){
         if(name != "") {
