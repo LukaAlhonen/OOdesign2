@@ -2,6 +2,12 @@
 * @Authors: Luka Alhonen, Amos Weckström
 * Denna klass representerar ett album. Albumet kan innehålla både subalbum
 * och ljudfiler
+*
+* Ändringar:
+*  - Ändrade datastrukturen för subalbum och ljudfiler från ArrayList till HashSet
+*  - Tog bort onödiga metoder p.g.a. flytten från arraylist till hashset
+*  - Lade till en länk till albumets förälder i form av Parent instansvariabeln
+*  - Lade till getters för att returnera subalbum samt ljudfiler hashseterna
 */
 package model;
 
