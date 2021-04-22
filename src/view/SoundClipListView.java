@@ -1,6 +1,7 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -29,11 +30,13 @@ public class SoundClipListView extends ListView<SoundClip> {
 	 */
 	public void display(Album album){
 		this.getItems().clear();
-		
-		// TODO:
-		for (int i = 0; i < album.getNumSoundClips(); i++) {
-			clips.add(album.getSoundClip(i));
+		Iterator iterator = album.getSoundClips().iterator();
+		while (iterator.hasNext()) {
+			SoundClip s = (SoundClip) iterator.next();
+			clips.add(s);
+
 		}
+
 		// Add all SoundClips contained in the parameter album to 
 		// the list of SoundClips 'clips' (the instance variable)
 		

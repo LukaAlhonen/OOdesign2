@@ -1,9 +1,6 @@
 package controller;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -71,9 +68,10 @@ public class MusicOrganizerController {
 	 */
 	public void addNewAlbum(Album album){ //TODO Update parameters if needed - e.g. you might want to give the currently selected album as parameter
 		// TODO: Add your code here
-		Album x = new Album(view.promptForAlbumName());
+		Album x = new Album(view.promptForAlbumName(), album);
 		if (album == null) {
 			getRootAlbum().addSubAlbum(x);
+			view.onAlbumAdded(x);
 		} else {
 			album.addSubAlbum(x);
 			view.onAlbumAdded(x);
@@ -87,10 +85,15 @@ public class MusicOrganizerController {
 	/**
 	 * Removes an album from the Music Organizer
 	 */
-	public void deleteAlbum(Album album){ //TODO Update parameters if needed
-		// TODO: Add your code here
+	public void deleteAlbum(Album album){
+		if(album == root) {
+			return;
+		}
+		album.getParent().removeSubAlbum(album);
+		view.onAlbumRemoved();
 
-		
+		//TODO Update parameters if needed
+		// TODO: Add your code here
 	}
 	
 	/**
@@ -98,22 +101,16 @@ public class MusicOrganizerController {
 	 */
 	public void addSoundClips(Album album, List<SoundClip> clep){ //TODO Update parameters if needed
 		for (SoundClip clip: clep) {
-			byte check = 0;
-			for (int i = 0; i < album.getNumSoundClips(); i++) {
-				if (clip.equals(album.getSoundClip(i))) {
-					check = 1;
-				}
-			}
-			if (check == 0) {
-				album.addSoundClip(clip);
-			}
+			album.addSoundClip(clip);
+
 		}
 	}
 	
 	/**
 	 * Removes sound clips from an album
 	 */
-	public void removeSoundClips(){ //TODO Update parameters if needed
+	public void removeSoundClips(Album album, SoundClip clip){ //TODO Update parameters if needed
+
 		// TODO: Add your code here
 		
 	}
