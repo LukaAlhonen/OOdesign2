@@ -95,8 +95,16 @@ public class MusicOrganizerController {
 	 * Adds sound clips to an album
 	 */
 	public void addSoundClips(Album album, List<SoundClip> clep){ //TODO Update parameters if needed
+		Album temp = album.getParent();
 		for (SoundClip clip: clep) {
 			album.addSoundClip(clip);
+			while (temp != root) {
+				temp.addSoundClip(clip);
+				temp = temp.getParent();
+			}
+			temp = album.getParent();
+
+
 
 		}
 	}
@@ -105,10 +113,16 @@ public class MusicOrganizerController {
 	 * Removes sound clips from an album
 	 */
 	public void removeSoundClips(Album album, List<SoundClip> clips){ //TODO Update parameters if needed
-
+		if(album.getSubAlbums() != null) {
+			Iterator itr = album.getSubAlbums().iterator();
+			while(itr.hasNext()){
+				removeSoundClips((Album) itr.next(), clips);
+			}
+		}
 		// TODO: Add your code here
 		for(SoundClip clip : clips){
 			album.removeSoundClip(clip);
+
 		}
 		view.onClipsUpdated();
 	}
