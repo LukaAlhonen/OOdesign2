@@ -1,2 +1,2 @@
 # OOdesign2
-# wE Are coding experts thank you
+# Se kommentarerna i klassen album för info om ändringar
