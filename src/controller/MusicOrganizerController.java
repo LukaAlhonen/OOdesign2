@@ -6,12 +6,14 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import model.Album;
 
-
+import model.AddCommand;
+import model.RemoveCommand;
 import model.SoundClip;
 import model.SoundClipBlockingQueue;
 import model.SoundClipLoader;
 import model.SoundClipPlayer;
 import view.MusicOrganizerWindow;
+import model.Command;
 
 public class MusicOrganizerController {
 
@@ -20,6 +22,9 @@ public class MusicOrganizerController {
 	private Album root;
 	private String name;
 	private Album newTreeNode;
+	private LinkedList<Command> undoStack = new LinkedList<>();
+	private LinkedList<Command> redoStack = new LinkedList<>();
+	private int counter;
 	
 	public MusicOrganizerController() {
 
@@ -71,21 +76,24 @@ public class MusicOrganizerController {
 		if(album == null){
 			return;
 		}
-
 		Album x = new Album(view.promptForAlbumName(), album);
 		album.addSubAlbum(x);
-		view.onAlbumAdded(x);
+		view.onAlbumAdded(album, x);
+		newAdd(x, album, null);
 	}
 	
 	/**
 	 * Removes an album from the Music Organizer
 	 */
 	public void deleteAlbum(Album album){
+		newRemove(album,album.getParent(),null);
 		if(album == root) {
 			return;
 		}
 		album.getParent().removeSubAlbum(album);
-		view.onAlbumRemoved();
+		view.onAlbumRemoved(album);
+
+
 
 		//TODO Update parameters if needed
 		// TODO: Add your code here
@@ -95,6 +103,7 @@ public class MusicOrganizerController {
 	 * Adds sound clips to an album
 	 */
 	public void addSoundClips(Album album, List<SoundClip> clep){ //TODO Update parameters if needed
+		newAdd(album,null,clep);
 		Album temp = album.getParent();
 		for (SoundClip clip: clep) {
 			album.addSoundClip(clip);
@@ -113,6 +122,9 @@ public class MusicOrganizerController {
 	 * Removes sound clips from an album
 	 */
 	public void removeSoundClips(Album album, List<SoundClip> clips){ //TODO Update parameters if needed
+
+		newRemove(album, null, clips);
+
 		if(album.getSubAlbums() != null) {
 			Iterator itr = album.getSubAlbums().iterator();
 			while(itr.hasNext()){
@@ -139,5 +151,41 @@ public class MusicOrganizerController {
 		for(int i=0;i<l.size();i++) {
 			view.displayMessage("Playing " + l.get(i));
 		}
+	}
+
+	public void newRemove(Album album, Album parent, List<SoundClip> clips){
+		RemoveCommand rc;
+		if(clips == null) {
+			rc = new RemoveCommand(album, parent, view);
+		} else{
+			rc = new RemoveCommand(album, clips, view);
+		}
+		undoStack.push(rc);
+	}
+
+	public void newAdd(Album album, Album parent, List<SoundClip> clips){
+		AddCommand ac;
+		if(clips == null) {
+			ac = new AddCommand(album, parent, view);
+		} else{
+			ac = new AddCommand(album, clips, view);
+		}
+		undoStack.push(ac);
+	}
+
+	public void undo(){
+		if(undoStack.isEmpty()){
+			return;
+		}
+		Command comm = undoStack.pop();
+		redoStack.push(comm);
+		comm.undo();
+	}
+
+	public void redo(){
+		if(redoStack.isEmpty()){
+			return;
+		}
+		redoStack.pop().redo();
 	}
 }

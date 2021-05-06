@@ -12,36 +12,43 @@ public class ButtonPaneHBox extends HBox {
 
 	private MusicOrganizerController controller;
 	private MusicOrganizerWindow view;
-	
+
 	private Button newAlbumButton;
 	private Button deleteAlbumButton;
 	private Button addSoundClipsButton;
-	private Button removeSoundClipsButton;	
+	private Button removeSoundClipsButton;
 	private Button playButton;
+	private Button undoButton;
+	private Button redoButton;
 	public static final int BUTTON_MIN_WIDTH = 150;
 
-	
-	
+
+
 	public ButtonPaneHBox(MusicOrganizerController contr, MusicOrganizerWindow view) {
 		super();
 		this.controller = contr;
 		this.view = view;
-		
+
 		newAlbumButton = createNewAlbumButton();
 		this.getChildren().add(newAlbumButton);
 
 		deleteAlbumButton = createDeleteAlbumButton();
 		this.getChildren().add(deleteAlbumButton);
-		
+
 		addSoundClipsButton = createAddSoundClipsButton();
 		this.getChildren().add(addSoundClipsButton);
-		
+
 		removeSoundClipsButton = createRemoveSoundClipsButton();
 		this.getChildren().add(removeSoundClipsButton);
-		
+
 		playButton = createPlaySoundClipsButton();
 		this.getChildren().add(playButton);
-		
+
+		undoButton = createUndoButton();
+		this.getChildren().add(undoButton);
+
+		redoButton = createRedoButton();
+		this.getChildren().add(redoButton);
 
 	}
 	
@@ -130,4 +137,33 @@ public class ButtonPaneHBox extends HBox {
 		});
 		return button;
 	}
+
+	private Button createUndoButton(){
+		Button button = new Button("Undo");
+		button.setTooltip(new Tooltip("Undo last operation"));
+		button.setMinWidth(BUTTON_MIN_WIDTH);
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				controller.undo();
+			}
+		});
+
+		return button;
+	}
+
+	private Button createRedoButton(){
+		Button button = new Button("Redo");
+		button.setTooltip(new Tooltip("Redo last operation"));
+		button.setMinWidth(BUTTON_MIN_WIDTH);
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				controller.redo();
+			}
+		});
+
+		return button;
+	}
+
 }

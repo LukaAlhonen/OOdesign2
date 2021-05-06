@@ -211,21 +211,41 @@ public class MusicOrganizerWindow extends Application {
 	 * Updates the album hierarchy with a new album
 	 * @param newAlbum
 	 */
-	public void onAlbumAdded(Album newAlbum){
-		TreeItem<Album> parentItem = getSelectedTreeItem();
-		TreeItem<Album> newItem = new TreeItem<>(newAlbum);
-		parentItem.getChildren().add(newItem);
-		parentItem.setExpanded(true); // automatically expand the parent node in the tree
+	public void onAlbumAdded(Album parent, Album newAlbum){
+
+		TreeItem<Album> root = tree.getRoot();
+		TreeItem<Album> parentNode = findAlbumNode(parent, root);
+
+		parentNode.getChildren().add(new TreeItem<>(newAlbum));
+		parentNode.setExpanded(true); // automatically expand the parent node in the tree
+
 	}
-	
 	/**
 	 * Updates the album hierarchy by removing an album from it
 	 */
-	public void onAlbumRemoved(){
-		TreeItem<Album> toRemove = getSelectedTreeItem(); 
-		TreeItem<Album> parent = toRemove.getParent();
-		parent.getChildren().remove(toRemove);
-		
+	public void onAlbumRemoved(Album toRemove) {
+
+		TreeItem<Album> root = tree.getRoot();
+
+		TreeItem<Album> nodeToRemove = findAlbumNode(toRemove, root);
+		nodeToRemove.getParent().getChildren().remove(nodeToRemove);
+	}
+
+	private TreeItem<Album> findAlbumNode(Album albumToFind, TreeItem<Album> root) {
+
+		// recursive method to locate a node that contains a specific album in the TreeView
+
+		if(root.getValue().equals(albumToFind)) {
+			return root;
+		}
+
+		for(TreeItem<Album> node : root.getChildren()) {
+			TreeItem<Album> item = findAlbumNode(albumToFind, node);
+			if(item != null)
+				return item;
+		}
+
+		return null;
 	}
 	
 	/**
