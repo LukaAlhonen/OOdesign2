@@ -15,9 +15,9 @@ public class AddCommand implements Command{
         this.view = view;
     }
 
-    public AddCommand(Album album, Album parent, MusicOrganizerWindow view){
+    public AddCommand(Album album, MusicOrganizerWindow view){
         this.album = album;
-        this.parent = parent;
+        this.parent = album.getParent();
         this.view = view;
     }
 
@@ -34,6 +34,14 @@ public class AddCommand implements Command{
     }
 
     public void redo(){
-
+        if(soundClips == null){
+            parent.addSubAlbum(album);
+            view.onAlbumAdded(parent, album);
+        } else {
+            for(SoundClip clip : soundClips){
+                album.addSoundClip(clip);
+                view.onClipsUpdated();
+            }
+        }
     }
 }

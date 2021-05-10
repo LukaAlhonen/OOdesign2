@@ -79,31 +79,30 @@ public class MusicOrganizerController {
 		Album x = new Album(view.promptForAlbumName(), album);
 		album.addSubAlbum(x);
 		view.onAlbumAdded(album, x);
-		newAdd(x, album, null);
+		newAdd(x, null);
+		redoStack.clear();
 	}
 	
 	/**
 	 * Removes an album from the Music Organizer
 	 */
 	public void deleteAlbum(Album album){
-		newRemove(album,album.getParent(),null);
+		//TODO Update parameters if needed
+		// TODO: Add your code here
+		newRemove(album,null);
 		if(album == root) {
 			return;
 		}
 		album.getParent().removeSubAlbum(album);
 		view.onAlbumRemoved(album);
-
-
-
-		//TODO Update parameters if needed
-		// TODO: Add your code here
+		redoStack.clear();
 	}
 	
 	/**
 	 * Adds sound clips to an album
 	 */
 	public void addSoundClips(Album album, List<SoundClip> clep){ //TODO Update parameters if needed
-		newAdd(album,null,clep);
+		newAdd(album, clep);
 		Album temp = album.getParent();
 		for (SoundClip clip: clep) {
 			album.addSoundClip(clip);
@@ -112,10 +111,8 @@ public class MusicOrganizerController {
 				temp = temp.getParent();
 			}
 			temp = album.getParent();
-
-
-
 		}
+		redoStack.clear();
 	}
 	
 	/**
@@ -123,7 +120,7 @@ public class MusicOrganizerController {
 	 */
 	public void removeSoundClips(Album album, List<SoundClip> clips){ //TODO Update parameters if needed
 
-		newRemove(album, null, clips);
+		newRemove(album, clips);
 
 		if(album.getSubAlbums() != null) {
 			Iterator itr = album.getSubAlbums().iterator();
@@ -137,6 +134,7 @@ public class MusicOrganizerController {
 
 		}
 		view.onClipsUpdated();
+		redoStack.clear();
 	}
 	
 	/**
@@ -153,20 +151,20 @@ public class MusicOrganizerController {
 		}
 	}
 
-	public void newRemove(Album album, Album parent, List<SoundClip> clips){
+	public void newRemove(Album album, List<SoundClip> clips){
 		RemoveCommand rc;
 		if(clips == null) {
-			rc = new RemoveCommand(album, parent, view);
+			rc = new RemoveCommand(album, view);
 		} else{
 			rc = new RemoveCommand(album, clips, view);
 		}
 		undoStack.push(rc);
 	}
 
-	public void newAdd(Album album, Album parent, List<SoundClip> clips){
+	public void newAdd(Album album, List<SoundClip> clips){
 		AddCommand ac;
 		if(clips == null) {
-			ac = new AddCommand(album, parent, view);
+			ac = new AddCommand(album, view);
 		} else{
 			ac = new AddCommand(album, clips, view);
 		}
