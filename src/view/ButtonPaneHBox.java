@@ -2,6 +2,7 @@ package view;
 
 
 import controller.MusicOrganizerController;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -20,6 +21,8 @@ public class ButtonPaneHBox extends HBox {
 	private Button playButton;
 	private Button undoButton;
 	private Button redoButton;
+	private Button flagButton;
+	private Button gradeButton;
 	public static final int BUTTON_MIN_WIDTH = 150;
 
 
@@ -50,6 +53,12 @@ public class ButtonPaneHBox extends HBox {
 		redoButton = createRedoButton();
 		this.getChildren().add(redoButton);
 
+		flagButton = createFlagButton();
+		this.getChildren().add(flagButton);
+
+		gradeButton = createGradeButton();
+		this.getChildren().add(gradeButton);
+
 	}
 	
 	/*
@@ -66,8 +75,8 @@ public class ButtonPaneHBox extends HBox {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-			
 				controller.addNewAlbum(view.getSelectedAlbum());
+				enableUndo();
 			}
 			
 		});
@@ -82,8 +91,8 @@ public class ButtonPaneHBox extends HBox {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				
 				controller.deleteAlbum(view.getSelectedAlbum());
+				enableUndo();
 			}
 			
 		});
@@ -98,8 +107,8 @@ public class ButtonPaneHBox extends HBox {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				
 				controller.addSoundClips(view.getSelectedAlbum(),view.getSelectedSoundClips());
+				enableUndo();
 			}
 			
 		});
@@ -114,8 +123,8 @@ public class ButtonPaneHBox extends HBox {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				
 				controller.removeSoundClips(view.getSelectedAlbum(), view.getSelectedSoundClips());
+				enableUndo();
 			}
 			
 		});
@@ -142,13 +151,20 @@ public class ButtonPaneHBox extends HBox {
 		Button button = new Button("Undo");
 		button.setTooltip(new Tooltip("Undo last operation"));
 		button.setMinWidth(BUTTON_MIN_WIDTH);
+		button.setDisable(true);
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
 				controller.undo();
+				// Enable redoButton
+				if(controller.undoIsEmpty()){
+					button.setDisable(true);
+				}
+				if(redoButton.isDisabled()){
+					redoButton.setDisable(false);
+				}
 			}
 		});
-
 		return button;
 	}
 
@@ -156,10 +172,52 @@ public class ButtonPaneHBox extends HBox {
 		Button button = new Button("Redo");
 		button.setTooltip(new Tooltip("Redo last operation"));
 		button.setMinWidth(BUTTON_MIN_WIDTH);
+		button.setDisable(true);
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
 				controller.redo();
+				if(controller.redoIsEmpty()){
+					button.setDisable(true);
+				}
+				enableUndo();
+			}
+		});
+
+		return button;
+	}
+
+	public void enableUndo(){
+		if(controller.redoIsEmpty()) {
+			redoButton.setDisable(true);
+		}
+		if(undoButton.isDisabled()){
+			undoButton.setDisable(false);
+		}
+	}
+
+	private Button createFlagButton(){
+		Button button = new Button("Flag");
+		button.setTooltip(new Tooltip("Flag soundclip"));
+		button.setMinWidth(BUTTON_MIN_WIDTH);
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				controller.flag(view.getSelectedSoundClips());
+			}
+		});
+
+		return button;
+	}
+
+	private Button createGradeButton(){
+		Button button = new Button("Grade");
+		button.setTooltip(new Tooltip("Grade soundclip"));
+		button.setMinWidth(BUTTON_MIN_WIDTH);
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				controller.grade(view.getSelectedSoundClips());
 			}
 		});
 

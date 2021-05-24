@@ -83,7 +83,7 @@ public class MusicOrganizerWindow extends Application {
 			});
 
 			primaryStage.show();
-			
+			controller.addSearchAlbums();
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -189,7 +189,30 @@ public class MusicOrganizerWindow extends Application {
 			return null;
 		}
 	}
-	
+
+	public int promptForGrade() {
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("Enter grade for soundclip");
+		dialog.setHeaderText("GRADE");
+		dialog.setContentText("Enter the grade or be doomed in hell for eternity.");
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()) {
+			if(isInteger(result.get())){
+				return Integer.parseInt(result.get());
+			}
+		}
+		return -1;
+	}
+
+	public static boolean isInteger(String s) {
+		try {
+			Integer.parseInt(s);
+		} catch(NumberFormatException e) {
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Return all the sound clips currently selected in the clip table.
 	 */
@@ -255,6 +278,10 @@ public class MusicOrganizerWindow extends Application {
 	public void onClipsUpdated(){
 		Album a = getSelectedAlbum();
 		soundClipTable.display(a);
+	}
+
+	public void onClipsUpdated(Album album){
+		soundClipTable.display(album);
 	}
 	
 }

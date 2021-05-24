@@ -24,7 +24,8 @@ public class MusicOrganizerController {
 	private Album newTreeNode;
 	private LinkedList<Command> undoStack = new LinkedList<>();
 	private LinkedList<Command> redoStack = new LinkedList<>();
-	private int counter;
+	private Album great;
+	private Album flagged;
 	
 	public MusicOrganizerController() {
 
@@ -67,16 +68,31 @@ public class MusicOrganizerController {
 	public Album getRootAlbum(){
 		return root;
 	}
+
+	public void addSearchAlbums(){
+		great = new Album("Great SoundClips", root);
+		flagged = new Album("Flagged SoundClips", root);
+		root.addSubAlbum(great);
+		view.onAlbumAdded(root, great);
+		root.addSubAlbum(flagged);
+		view.onAlbumAdded(root, flagged);
+	}
 	
 	/**
 	 * Adds an album to the Music Organizer
 	 */
 	public void addNewAlbum(Album album){ //TODO Update parameters if needed - e.g. you might want to give the currently selected album as parameter
 		// TODO: Add your code here
+		Album x;
 		if(album == null){
 			return;
 		}
-		Album x = new Album(view.promptForAlbumName(), album);
+		while(true) {
+			x = new Album(view.promptForAlbumName(), album);
+			if(!(x.toString().equals(great.toString())) && !(x.toString().equals(flagged.toString()))){
+				break;
+			}
+		}
 		album.addSubAlbum(x);
 		view.onAlbumAdded(album, x);
 		newAdd(x, null);
@@ -184,6 +200,55 @@ public class MusicOrganizerController {
 		if(redoStack.isEmpty()){
 			return;
 		}
-		redoStack.pop().redo();
+		Command comm = redoStack.pop();
+		undoStack.push(comm);
+		comm.redo();
+	}
+
+	public boolean undoIsEmpty(){
+		return undoStack.isEmpty();
+	}
+
+	public boolean redoIsEmpty(){
+		return redoStack.isEmpty();
+	}
+
+	public void flag(List<SoundClip> clips){
+		List<SoundClip> temp = new LinkedList<>();
+		for(SoundClip clip : clips){
+			temp.clear();
+			clip.flag();
+			if(clip.isFlagged()){
+				temp.add(clip);
+				addSoundClips(flagged, temp);
+			} else{
+				temp.add(clip);
+				removeSoundClips(flagged, temp);
+			}
+			view.onClipsUpdated(flagged);
+		}
+	}
+
+
+	public void grade(List<SoundClip> clips) {
+		int grade;
+		List<SoundClip> temp = new LinkedList<>();
+		while(true){
+			grade = view.promptForGrade();
+			if(grade >= 0 && grade <= 5){
+				break;
+			}
+		}
+		for(SoundClip clip : clips){
+			clip.grade(grade);
+			temp.add(clip);
+			if(clip.getGrade() >= 4){
+				addSoundClips(great, temp);
+			} else if(clip.isGraded()){
+				removeSoundClips(great, temp);
+			}
+		}
+		view.onClipsUpdated(great);
 	}
 }
+

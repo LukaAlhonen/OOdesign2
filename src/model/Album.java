@@ -38,12 +38,6 @@ public class Album {
         }
     }
 
-    // Simpel construktor med default namn
-
-    public Album(){
-        this.name = "New Album";
-    }
-    
     // Getters
 
     public Set getSubAlbums() {
